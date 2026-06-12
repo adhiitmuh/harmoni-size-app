@@ -16,14 +16,14 @@ export default function WelcomeScreen({ onStart }: Props) {
     canvas.height = window.innerHeight;
 
     const particles: { x: number; y: number; vx: number; vy: number; r: number; alpha: number }[] = [];
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 60; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 2 + 0.5,
-        alpha: Math.random() * 0.5 + 0.1,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.3 + 0.05,
       });
     }
 
@@ -40,19 +40,18 @@ export default function WelcomeScreen({ onStart }: Props) {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(6,214,245,${p.alpha})`;
+        ctx.fillStyle = `rgba(255,251,213,${p.alpha})`;
         ctx.fill();
       });
 
-      // Draw connections
       particles.forEach((a, i) => {
         particles.slice(i + 1).forEach(b => {
           const d = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-          if (d < 120) {
+          if (d < 130) {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(6,214,245,${0.15 * (1 - d / 120)})`;
+            ctx.strokeStyle = `rgba(255,251,213,${0.08 * (1 - d / 130)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -72,45 +71,44 @@ export default function WelcomeScreen({ onStart }: Props) {
   }, []);
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+    <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: '#034543' }}>
       <canvas ref={canvasRef} className="particle-canvas" />
 
-      {/* Radial glow background */}
+      {/* Radial glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(6,214,245,0.06) 0%, transparent 70%)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(255,251,213,0.05) 0%, transparent 70%)' }} />
       </div>
 
       {/* Logo ring */}
       <motion.div
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
         className="relative mb-8"
       >
         <div className="w-28 h-28 rounded-full flex items-center justify-center animate-spin-slow"
-          style={{ border: '1px solid rgba(6,214,245,0.3)', boxShadow: '0 0 30px rgba(6,214,245,0.15)' }}>
+          style={{ border: '1px solid rgba(255,251,213,0.2)', boxShadow: '0 0 40px rgba(255,251,213,0.08)' }}>
           <div className="w-20 h-20 rounded-full flex items-center justify-center"
-            style={{ border: '2px solid rgba(6,214,245,0.6)', boxShadow: '0 0 20px rgba(6,214,245,0.3)' }}>
-            {/* Body silhouette icon */}
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="8" r="4" fill="none" stroke="#06d6f5" strokeWidth="1.5"/>
-              <path d="M12 16 Q10 24 11 32" stroke="#06d6f5" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-              <path d="M28 16 Q30 24 29 32" stroke="#06d6f5" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-              <path d="M12 16 Q20 20 28 16" stroke="#06d6f5" strokeWidth="1.5" fill="none"/>
-              <path d="M14 20 Q20 22 26 20" stroke="#06d6f5" strokeWidth="1.5" fill="none"/>
-              <path d="M15 24 Q20 26 25 24 L26 32 L20 30 L14 32 Z" stroke="#06d6f5" strokeWidth="1.5" fill="none"/>
+            style={{ border: '1px solid rgba(255,251,213,0.45)', boxShadow: '0 0 20px rgba(255,251,213,0.1)' }}>
+            <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="8" r="4" fill="none" stroke="#FFFBD5" strokeWidth="1.2"/>
+              <path d="M12 16 Q10 24 11 32" stroke="#FFFBD5" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+              <path d="M28 16 Q30 24 29 32" stroke="#FFFBD5" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+              <path d="M12 16 Q20 20 28 16" stroke="#FFFBD5" strokeWidth="1.2" fill="none"/>
+              <path d="M14 20 Q20 22 26 20" stroke="#FFFBD5" strokeWidth="1.2" fill="none"/>
+              <path d="M15 24 Q20 26 25 24 L26 32 L20 30 L14 32 Z" stroke="#FFFBD5" strokeWidth="1.2" fill="none"/>
             </svg>
           </div>
         </div>
-        {/* Orbit dot */}
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
           className="absolute inset-0"
         >
-          <div className="absolute top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
-            style={{ background: '#06d6f5', boxShadow: '0 0 8px #06d6f5' }} />
+          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+            style={{ background: '#FFFBD5', boxShadow: '0 0 6px rgba(255,251,213,0.8)' }} />
         </motion.div>
       </motion.div>
 
@@ -121,16 +119,17 @@ export default function WelcomeScreen({ onStart }: Props) {
         transition={{ delay: 0.3, duration: 0.7 }}
         className="text-center mb-3"
       >
-        <h1 className="font-orbitron font-black text-5xl md:text-6xl tracking-widest text-glow-cyan"
-          style={{ color: '#06d6f5' }}>
-          HARMONI
+        <h1 className="font-raleway font-black text-5xl md:text-6xl tracking-[0.2em] text-glow-cyan"
+          style={{ color: '#FFFBD5', letterSpacing: '0.18em' }}>
+          harmoni
         </h1>
-        <div className="flex items-center gap-3 justify-center mt-2">
-          <div className="h-px w-12 bg-cyber-cyan opacity-50" />
-          <p className="font-mono text-xs tracking-[0.3em] text-sky-300 opacity-80 uppercase">
+        <div className="flex items-center gap-3 justify-center mt-3">
+          <div className="h-px w-10" style={{ background: 'rgba(255,251,213,0.3)' }} />
+          <p className="font-raleway font-medium text-xs tracking-[0.25em] uppercase"
+            style={{ color: 'rgba(255,251,213,0.55)' }}>
             AI Body Size Scanner
           </p>
-          <div className="h-px w-12 bg-cyber-cyan opacity-50" />
+          <div className="h-px w-10" style={{ background: 'rgba(255,251,213,0.3)' }} />
         </div>
       </motion.div>
 
@@ -139,9 +138,10 @@ export default function WelcomeScreen({ onStart }: Props) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.6 }}
-        className="font-inter text-sky-400 text-sm md:text-base mb-10 text-center max-w-xs opacity-70"
+        className="font-raleway font-light text-sm md:text-base mb-10 text-center max-w-xs"
+        style={{ color: 'rgba(255,251,213,0.5)' }}
       >
-        Precision body measurements using real-time AI pose detection
+        Ukur tubuhmu dengan presisi menggunakan AI pose detection
       </motion.p>
 
       {/* CTA Button */}
@@ -152,35 +152,28 @@ export default function WelcomeScreen({ onStart }: Props) {
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
         onClick={onStart}
-        className="btn-cyber-solid px-10 py-4 text-sm font-orbitron tracking-widest rounded-sm cursor-pointer"
-        style={{ boxShadow: '0 0 30px rgba(6,214,245,0.25)' }}
+        className="btn-cyber-solid px-12 py-4 text-sm rounded-sm cursor-pointer tracking-widest"
       >
-        INITIATE SCAN
+        MULAI SCAN
       </motion.button>
 
-      {/* Version tag */}
+      {/* Version */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
+        animate={{ opacity: 0.3 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-6 font-mono text-xs text-sky-500"
+        className="absolute bottom-6 font-raleway text-xs tracking-widest"
+        style={{ color: 'rgba(255,251,213,0.4)' }}
       >
-        v1.0.0 — HARMONI SYSTEMS
+        v1.0 — HARMONI
       </motion.div>
 
       {/* Corner decorations */}
-      <div className="absolute top-6 left-6 opacity-40">
-        <div className="w-6 h-6 border-t-2 border-l-2 border-cyber-cyan" />
-      </div>
-      <div className="absolute top-6 right-6 opacity-40">
-        <div className="w-6 h-6 border-t-2 border-r-2 border-cyber-cyan" />
-      </div>
-      <div className="absolute bottom-6 left-6 opacity-40">
-        <div className="w-6 h-6 border-b-2 border-l-2 border-cyber-cyan" />
-      </div>
-      <div className="absolute bottom-6 right-6 opacity-40">
-        <div className="w-6 h-6 border-b-2 border-r-2 border-cyber-cyan" />
-      </div>
+      {[['top-6 left-6', 'border-t border-l'], ['top-6 right-6', 'border-t border-r'],
+        ['bottom-6 left-6', 'border-b border-l'], ['bottom-6 right-6', 'border-b border-r']].map(([pos, b]) => (
+        <div key={pos} className={`absolute ${pos} w-5 h-5 ${b} opacity-25`}
+          style={{ borderColor: '#FFFBD5' }} />
+      ))}
     </div>
   );
 }

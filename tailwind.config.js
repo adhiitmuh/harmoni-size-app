@@ -4,19 +4,25 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        orbitron: ['Orbitron', 'sans-serif'],
-        mono: ['Space Mono', 'monospace'],
-        inter: ['Inter', 'sans-serif'],
+        raleway: ['Raleway', 'sans-serif'],
+        orbitron: ['Raleway', 'sans-serif'],
+        mono: ['Raleway', 'sans-serif'],
+        inter: ['Raleway', 'sans-serif'],
       },
       colors: {
+        harmoni: {
+          green: '#034543',
+          'green-dark': '#023836',
+          beige: '#FFFBD5',
+        },
         cyber: {
-          bg: '#030712',
-          panel: '#0a1628',
-          cyan: '#06d6f5',
-          purple: '#8b5cf6',
-          green: '#10f5a0',
-          red: '#f54b4b',
-          amber: '#f5a623',
+          bg: '#034543',
+          panel: '#023836',
+          cyan: '#FFFBD5',
+          purple: '#c8b878',
+          green: '#88c98b',
+          red: '#e07a5f',
+          amber: '#d4b483',
         },
       },
       animation: {

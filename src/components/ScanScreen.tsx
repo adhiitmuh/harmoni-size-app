@@ -82,7 +82,7 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
     const startCam = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
         });
         if (cancelled) { stream.getTracks().forEach(t => t.stop()); return; }
         streamRef.current = stream;
@@ -159,17 +159,17 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
     ctx.drawImage(video, -W, 0, W, H);
     ctx.restore();
 
-    ctx.fillStyle = 'rgba(3,7,18,0.35)';
+    ctx.fillStyle = 'rgba(3,69,67,0.3)';
     ctx.fillRect(0, 0, W, H);
 
     // Grid
-    ctx.strokeStyle = 'rgba(6,214,245,0.05)';
+    ctx.strokeStyle = 'rgba(255,251,213,0.04)';
     ctx.lineWidth = 0.5;
     for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
     for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
     // Corner brackets
-    const drawCorner = (x: number, y: number, dx: number, dy: number, color = '#06d6f5') => {
+    const drawCorner = (x: number, y: number, dx: number, dy: number, color = '#FFFBD5') => {
       ctx.beginPath();
       ctx.moveTo(x + dx * 28, y);
       ctx.lineTo(x, y);
@@ -178,7 +178,7 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
       ctx.lineWidth = 2;
       ctx.stroke();
     };
-    const bracketColor = isWalkby ? '#f5a623' : '#06d6f5';
+    const bracketColor = isWalkby ? '#d4b483' : '#FFFBD5';
     drawCorner(24, 24, 1, 1, bracketColor);
     drawCorner(W-24, 24, -1, 1, bracketColor);
     drawCorner(24, H-24, 1, -1, bracketColor);
@@ -190,15 +190,15 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
       const sl = scanLineRef.current;
       const vGrad = ctx.createLinearGradient(sl, 0, sl, H);
       vGrad.addColorStop(0, 'transparent');
-      vGrad.addColorStop(0.3, 'rgba(245,166,35,0.6)');
-      vGrad.addColorStop(0.5, 'rgba(245,166,35,0.9)');
-      vGrad.addColorStop(0.7, 'rgba(245,166,35,0.6)');
+      vGrad.addColorStop(0.3, 'rgba(212,180,131,0.6)');
+      vGrad.addColorStop(0.5, 'rgba(212,180,131,0.9)');
+      vGrad.addColorStop(0.7, 'rgba(212,180,131,0.6)');
       vGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = vGrad;
       ctx.fillRect(sl, 0, 2, H);
       // Trail
       const trailH = ctx.createLinearGradient(sl, 0, sl + 50, 0);
-      trailH.addColorStop(0, 'rgba(245,166,35,0.05)');
+      trailH.addColorStop(0, 'rgba(212,180,131,0.05)');
       trailH.addColorStop(1, 'transparent');
       ctx.fillStyle = trailH;
       ctx.fillRect(sl, 0, 50, H);
@@ -208,14 +208,14 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
       const sl = scanLineRef.current;
       const lineGrad = ctx.createLinearGradient(0, 0, W, 0);
       lineGrad.addColorStop(0, 'transparent');
-      lineGrad.addColorStop(0.3, 'rgba(6,214,245,0.8)');
-      lineGrad.addColorStop(0.5, 'rgba(139,92,246,1)');
-      lineGrad.addColorStop(0.7, 'rgba(6,214,245,0.8)');
+      lineGrad.addColorStop(0.3, 'rgba(255,251,213,0.7)');
+      lineGrad.addColorStop(0.5, 'rgba(212,180,131,0.9)');
+      lineGrad.addColorStop(0.7, 'rgba(255,251,213,0.7)');
       lineGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = lineGrad;
-      ctx.fillRect(0, sl, W, 2);
+      ctx.fillRect(0, sl, W, 1);
       const trailGrad = ctx.createLinearGradient(0, sl, 0, sl + 60);
-      trailGrad.addColorStop(0, 'rgba(6,214,245,0.06)');
+      trailGrad.addColorStop(0, 'rgba(255,251,213,0.05)');
       trailGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = trailGrad;
       ctx.fillRect(0, sl, W, 60);
@@ -251,9 +251,9 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
             ctx.beginPath();
             ctx.moveTo(ka.x, ka.y);
             ctx.lineTo(kb.x, kb.y);
-            ctx.strokeStyle = isWalkby ? 'rgba(245,166,35,0.75)' : 'rgba(6,214,245,0.75)';
+            ctx.strokeStyle = isWalkby ? 'rgba(212,180,131,0.75)' : 'rgba(255,251,213,0.75)';
             ctx.lineWidth = 2;
-            ctx.shadowColor = isWalkby ? '#f5a623' : '#06d6f5';
+            ctx.shadowColor = isWalkby ? '#d4b483' : '#FFFBD5';
             ctx.shadowBlur = 6;
             ctx.stroke();
             ctx.shadowBlur = 0;
@@ -264,8 +264,8 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
             if ((kp.score ?? 0) < 0.25) return;
             ctx.beginPath();
             ctx.arc(kp.x, kp.y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#10f5a0';
-            ctx.shadowColor = '#10f5a0';
+            ctx.fillStyle = '#88c98b';
+            ctx.shadowColor = '#88c98b';
             ctx.shadowBlur = 8;
             ctx.fill();
             ctx.shadowBlur = 0;
@@ -293,9 +293,9 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
               const angle = quality * Math.PI * 2 - Math.PI / 2;
               ctx.beginPath();
               ctx.arc(shoulderMidX, shoulderMidY, 20, -Math.PI / 2, angle);
-              ctx.strokeStyle = quality > 0.7 ? '#10f5a0' : '#f5a623';
+              ctx.strokeStyle = quality > 0.7 ? '#88c98b' : '#d4b483';
               ctx.lineWidth = 3;
-              ctx.shadowColor = quality > 0.7 ? '#10f5a0' : '#f5a623';
+              ctx.shadowColor = quality > 0.7 ? '#88c98b' : '#d4b483';
               ctx.shadowBlur = 10;
               ctx.stroke();
               ctx.shadowBlur = 0;
@@ -353,8 +353,8 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
     }
   };
 
-  const accentColor = isWalkby ? '#f5a623' : '#06d6f5';
-  const stableColor = scanState === 'stable' ? '#10f5a0' : accentColor;
+  const accentColor = isWalkby ? '#d4b483' : '#FFFBD5';
+  const stableColor = scanState === 'stable' ? '#88c98b' : accentColor;
 
   const canCapture = isWalkby
     ? (bestWalkbyFrame.current !== null || liveMeasurements !== null)
@@ -370,11 +370,11 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
         {scanState === 'loading' && (
           <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute inset-0 flex flex-col items-center justify-center"
-            style={{ background: 'rgba(3,7,18,0.95)' }}>
+            style={{ background: 'rgba(3,69,67,0.97)' }}>
             <div className="w-16 h-16 rounded-full mb-6 animate-spin"
-              style={{ border: '2px solid transparent', borderTopColor: '#06d6f5', borderRightColor: '#8b5cf6' }} />
-            <p className="font-mono text-xs tracking-widest text-sky-400">{loadingStage}</p>
-            <div className="mt-4 w-48 h-0.5 rounded overflow-hidden bg-sky-900">
+              style={{ border: '2px solid transparent', borderTopColor: '#FFFBD5', borderRightColor: '#d4b483' }} />
+            <p className="font-raleway font-semibold text-xs tracking-widest" style={{ color: 'rgba(255,251,213,0.7)' }}>{loadingStage}</p>
+            <div className="mt-4 w-48 h-0.5 rounded overflow-hidden" style={{ background: 'rgba(255,251,213,0.1)' }}>
               <div className="h-full loading-bar w-1/2" />
             </div>
           </motion.div>
@@ -383,18 +383,20 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
 
       {/* Walk-by mode label */}
       {isWalkby && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-sm font-orbitron text-xs tracking-wider"
-          style={{ border: '1px solid rgba(245,166,35,0.5)', color: '#f5a623', background: 'rgba(245,166,35,0.08)' }}>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-sm font-raleway font-bold text-xs tracking-wider"
+          style={{ border: '1px solid rgba(212,180,131,0.5)', color: '#d4b483', background: 'rgba(212,180,131,0.08)' }}>
           WALK-BY MODE
         </div>
       )}
 
       <button onClick={onBack}
-        className="absolute top-4 left-4 z-10 flex items-center gap-1.5 font-mono text-xs text-sky-400 opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
-        <ChevronLeft size={14} /> BACK
+        className="absolute top-4 left-4 z-10 flex items-center gap-1.5 font-raleway font-semibold text-xs opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
+        style={{ color: '#FFFBD5' }}>
+        <ChevronLeft size={14} /> KEMBALI
       </button>
 
-      <div className="absolute top-4 right-4 z-10 font-mono text-xs text-sky-600">STEP 02 / 02</div>
+      <div className="absolute top-4 right-4 z-10 font-raleway font-medium text-xs"
+        style={{ color: 'rgba(255,251,213,0.4)' }}>LANGKAH 02 / 02</div>
 
       {/* Walk-by countdown ring */}
       <AnimatePresence>
@@ -406,20 +408,20 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
           >
             <div className="relative w-14 h-14">
               <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
-                <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(245,166,35,0.15)" strokeWidth="3" />
-                <circle cx="28" cy="28" r="24" fill="none" stroke="#f5a623" strokeWidth="3"
+                <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(212,180,131,0.15)" strokeWidth="3" />
+                <circle cx="28" cy="28" r="24" fill="none" stroke="#d4b483" strokeWidth="3"
                   strokeDasharray={`${2 * Math.PI * 24}`}
                   strokeDashoffset={`${2 * Math.PI * 24 * (walkbyCountdown / WALKBY_WINDOW_SEC)}`}
                   strokeLinecap="round"
                   style={{ transition: 'stroke-dashoffset 0.25s linear' }}
                 />
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center font-orbitron text-base font-bold"
-                style={{ color: '#f5a623' }}>
+              <div className="absolute inset-0 flex items-center justify-center font-raleway font-black text-base"
+                style={{ color: '#d4b483' }}>
                 {walkbyCountdown}
               </div>
             </div>
-            <p className="font-mono text-[9px] text-amber-400 mt-1 tracking-wider">AUTO</p>
+            <p className="font-raleway text-[9px] mt-1 tracking-wider" style={{ color: '#d4b483' }}>AUTO</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -427,18 +429,19 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
       {/* Pose quality bar (walk-by) */}
       {isWalkby && poseQuality > 0 && (
         <div className="absolute top-16 right-4 z-10 flex flex-col items-end gap-1">
-          <span className="font-mono text-[10px] tracking-wider" style={{ color: 'rgba(245,166,35,0.7)' }}>
+          <span className="font-raleway font-semibold text-[10px] tracking-wider"
+            style={{ color: 'rgba(212,180,131,0.7)' }}>
             POSE QUALITY
           </span>
-          <div className="w-24 h-1.5 rounded bg-amber-900 overflow-hidden">
+          <div className="w-24 h-1.5 rounded overflow-hidden" style={{ background: 'rgba(212,180,131,0.15)' }}>
             <motion.div
               animate={{ width: `${poseQuality * 100}%` }}
               className="h-full rounded"
-              style={{ background: poseQuality > 0.7 ? '#10f5a0' : '#f5a623' }}
+              style={{ background: poseQuality > 0.7 ? '#88c98b' : '#d4b483' }}
             />
           </div>
-          <span className="font-mono text-[10px]"
-            style={{ color: poseQuality > 0.7 ? '#10f5a0' : '#f5a623' }}>
+          <span className="font-raleway text-[10px]"
+            style={{ color: poseQuality > 0.7 ? '#88c98b' : '#d4b483' }}>
             {Math.round(poseQuality * 100)}%
           </span>
         </div>
@@ -449,12 +452,12 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
         {liveMeasurements && (
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
             className="absolute top-16 left-4 z-10 space-y-1">
-            {([['CHEST', liveMeasurements.chest], ['WAIST', liveMeasurements.waist],
-               ['HIPS', liveMeasurements.hips], ['SHOULDER', liveMeasurements.shoulderWidth]] as [string,number][]).map(([l, v]) => (
-              <div key={l} className="flex items-center gap-2 font-mono text-xs">
-                <span className="opacity-50 text-[10px] tracking-wider w-16" style={{ color: accentColor }}>{l}</span>
+            {([['DADA', liveMeasurements.chest], ['PINGGANG', liveMeasurements.waist],
+               ['PINGGUL', liveMeasurements.hips], ['BAHU', liveMeasurements.shoulderWidth]] as [string,number][]).map(([l, v]) => (
+              <div key={l} className="flex items-center gap-2 font-raleway font-medium text-xs">
+                <span className="text-[10px] tracking-wider w-16" style={{ color: 'rgba(255,251,213,0.45)' }}>{l}</span>
                 <span style={{ color: stableColor }}>{v}</span>
-                <span className="opacity-40 text-[10px] text-sky-500">cm</span>
+                <span className="text-[10px]" style={{ color: 'rgba(255,251,213,0.35)' }}>cm</span>
               </div>
             ))}
           </motion.div>
@@ -463,37 +466,38 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
 
       {/* Keypoint count */}
       {detectedKps > 0 && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 font-mono text-xs text-sky-500">
-          {detectedKps}/17 KPS
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 font-raleway font-medium text-xs"
+          style={{ color: 'rgba(255,251,213,0.45)' }}>
+          {detectedKps}/17 titik
         </div>
       )}
 
       {/* Bottom bar */}
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4"
-        style={{ background: 'linear-gradient(transparent, rgba(3,7,18,0.95))' }}>
+        style={{ background: 'linear-gradient(transparent, rgba(3,69,67,0.96))' }}>
         <div className="flex items-center gap-2 mb-3">
           {scanState === 'stable'
-            ? <CheckCircle2 size={14} style={{ color: '#10f5a0' }} />
+            ? <CheckCircle2 size={14} style={{ color: '#88c98b' }} />
             : <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: accentColor }} />
           }
-          <span className="font-mono text-xs tracking-wider" style={{ color: stableColor }}>
+          <span className="font-raleway font-semibold text-xs tracking-wider" style={{ color: stableColor }}>
             {statusMsg}
           </span>
         </div>
 
         {/* Static: progress bar */}
         {!isWalkby && scanState === 'scanning' && measureBuffer.current.length > 0 && (
-          <div className="mb-3 h-0.5 bg-sky-900 rounded overflow-hidden">
+          <div className="mb-3 h-0.5 rounded overflow-hidden" style={{ background: 'rgba(255,251,213,0.1)' }}>
             <motion.div className="h-full rounded"
-              style={{ background: 'linear-gradient(90deg, #06d6f5, #8b5cf6)', width: `${(measureBuffer.current.length / STATIC_BUFFER) * 100}%` }}
+              style={{ background: 'linear-gradient(90deg, #FFFBD5, #d4b483)', width: `${(measureBuffer.current.length / STATIC_BUFFER) * 100}%` }}
             />
           </div>
         )}
 
         {/* Walk-by: best score so far */}
         {isWalkby && bestWalkbyFrame.current && (
-          <div className="mb-3 font-mono text-xs text-sky-600">
-            Best frame quality: <span style={{ color: '#f5a623' }}>{Math.round(bestWalkbyFrame.current.score * 100)}%</span>
+          <div className="mb-3 font-raleway text-xs" style={{ color: 'rgba(255,251,213,0.4)' }}>
+            Kualitas terbaik: <span style={{ color: '#d4b483' }}>{Math.round(bestWalkbyFrame.current.score * 100)}%</span>
           </div>
         )}
 
@@ -502,27 +506,27 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
           whileTap={canCapture ? { scale: 0.98 } : {}}
           onClick={handleCapture}
           disabled={!canCapture}
-          className="w-full py-3.5 rounded-sm font-orbitron text-sm tracking-widest transition-all cursor-pointer"
+          className="w-full py-3.5 rounded-sm font-raleway font-black text-sm tracking-widest transition-all cursor-pointer"
           style={scanState === 'stable'
-            ? { border: '1px solid #10f5a0', color: '#10f5a0', background: 'rgba(16,245,160,0.08)', boxShadow: '0 0 20px rgba(16,245,160,0.2)' }
+            ? { background: '#FFFBD5', color: '#034543', boxShadow: '0 4px 20px rgba(255,251,213,0.2)' }
             : canCapture
-              ? { border: `1px solid ${accentColor}`, color: accentColor, background: `rgba(6,214,245,0.05)` }
-              : { border: '1px solid rgba(100,100,120,0.3)', color: 'rgba(100,100,150,0.5)', cursor: 'not-allowed' }
+              ? { border: `1px solid ${accentColor}`, color: accentColor, background: 'rgba(255,251,213,0.04)' }
+              : { border: '1px solid rgba(255,251,213,0.15)', color: 'rgba(255,251,213,0.3)', cursor: 'not-allowed' }
           }
         >
-          {scanState === 'stable' ? '⬡ CAPTURE MEASUREMENTS'
-            : isWalkby && canCapture ? '⬡ CAPTURE BEST FRAME NOW'
-            : !canCapture ? 'DETECTING BODY...'
-            : 'CAPTURE (STABILIZING...)'}
+          {scanState === 'stable' ? 'AMBIL UKURAN'
+            : isWalkby && canCapture ? 'AMBIL FRAME TERBAIK'
+            : !canCapture ? 'MENDETEKSI TUBUH...'
+            : 'STABILISASI...'}
         </motion.button>
       </div>
 
       {/* Stable flash */}
       <AnimatePresence>
         {scanState === 'stable' && (
-          <motion.div initial={{ opacity: 0.4 }} animate={{ opacity: 0 }} transition={{ duration: 1.2 }}
+          <motion.div initial={{ opacity: 0.3 }} animate={{ opacity: 0 }} transition={{ duration: 1.2 }}
             className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(16,245,160,0.12), transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(255,251,213,0.08), transparent 70%)' }}
           />
         )}
       </AnimatePresence>

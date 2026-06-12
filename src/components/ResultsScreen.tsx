@@ -34,14 +34,15 @@ const MeasureRow = ({ label, value, unit, delay }: { label: string; value: numbe
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay, duration: 0.4 }}
       className="flex items-center justify-between py-2 border-b"
-      style={{ borderColor: 'rgba(6,214,245,0.1)' }}
+      style={{ borderColor: 'rgba(255,251,213,0.1)' }}
     >
-      <span className="font-mono text-xs text-sky-500 tracking-wider w-28">{label}</span>
+      <span className="font-raleway font-medium text-xs tracking-wider w-32"
+        style={{ color: 'rgba(255,251,213,0.5)' }}>{label}</span>
       <div className="flex items-baseline gap-1.5">
-        <span className="font-orbitron text-xl font-bold" style={{ color: '#10f5a0', textShadow: '0 0 10px rgba(16,245,160,0.5)' }}>
+        <span className="font-raleway font-black text-xl" style={{ color: '#FFFBD5' }}>
           {count}
         </span>
-        <span className="font-mono text-xs text-sky-600">{unit}</span>
+        <span className="font-raleway text-xs" style={{ color: 'rgba(255,251,213,0.4)' }}>{unit}</span>
       </div>
     </motion.div>
   );
@@ -49,9 +50,10 @@ const MeasureRow = ({ label, value, unit, delay }: { label: string; value: numbe
 
 const SizeTag = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col items-center gap-1">
-    <span className="font-mono text-[10px] text-sky-600 tracking-wider">{label}</span>
-    <div className="px-3 py-1 rounded-sm font-orbitron text-sm font-bold"
-      style={{ border: '1px solid rgba(139,92,246,0.5)', color: '#c4b5fd', background: 'rgba(139,92,246,0.08)' }}>
+    <span className="font-raleway font-medium text-[10px] tracking-wider"
+      style={{ color: 'rgba(255,251,213,0.45)' }}>{label}</span>
+    <div className="px-3 py-1 rounded-sm font-raleway font-black text-sm"
+      style={{ border: '1px solid rgba(212,180,131,0.4)', color: '#d4b483', background: 'rgba(212,180,131,0.07)' }}>
       {value}
     </div>
   </div>
@@ -62,12 +64,13 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
 
   return (
     <div className="relative w-full h-full overflow-y-auto flex flex-col items-center px-4 py-6"
-      style={{ background: 'linear-gradient(180deg, #030712 0%, #0a0f1e 100%)' }}>
+      style={{ background: 'linear-gradient(180deg, #034543 0%, #023836 100%)' }}>
 
       {/* Corner decorations */}
-      {[['top-4 left-4', 'border-t-2 border-l-2'], ['top-4 right-4', 'border-t-2 border-r-2'],
-        ['bottom-4 left-4', 'border-b-2 border-l-2'], ['bottom-4 right-4', 'border-b-2 border-r-2']].map(([pos, b]) => (
-        <div key={pos} className={`absolute ${pos} w-5 h-5 ${b} opacity-30`} style={{ borderColor: '#06d6f5' }} />
+      {[['top-4 left-4', 'border-t border-l'], ['top-4 right-4', 'border-t border-r'],
+        ['bottom-4 left-4', 'border-b border-l'], ['bottom-4 right-4', 'border-b border-r']].map(([pos, b]) => (
+        <div key={pos} className={`absolute ${pos} w-5 h-5 ${b} opacity-20`}
+          style={{ borderColor: '#FFFBD5' }} />
       ))}
 
       {/* Header */}
@@ -77,12 +80,15 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
         className="w-full max-w-sm mb-6 text-center"
       >
         <div className="flex items-center gap-2 justify-center mb-1">
-          <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#10f5a0' }} />
-          <p className="font-mono text-xs tracking-widest text-emerald-400">SCAN COMPLETE</p>
+          <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#88c98b' }} />
+          <p className="font-raleway font-semibold text-xs tracking-widest"
+            style={{ color: '#88c98b' }}>SCAN SELESAI</p>
         </div>
-        <h2 className="font-orbitron text-2xl font-bold tracking-wider text-white">YOUR MEASUREMENTS</h2>
+        <h2 className="font-raleway font-black text-2xl tracking-wider" style={{ color: '#FFFBD5' }}>
+          UKURAN TUBUHMU
+        </h2>
         <div className="h-px mt-2 mx-auto w-40"
-          style={{ background: 'linear-gradient(90deg, transparent, #10f5a0, transparent)' }} />
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,251,213,0.4), transparent)' }} />
       </motion.div>
 
       <div className="w-full max-w-sm space-y-4">
@@ -93,17 +99,21 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
           transition={{ delay: 0.1 }}
           className="holo-panel rounded-sm p-4"
         >
-          <p className="font-mono text-xs text-sky-500 tracking-widest mb-1">◈ BODY MEASUREMENTS</p>
-          <p className="font-mono text-[10px] text-sky-700 mb-3">AI-estimated · Frontal camera · Input height: {m.height}cm</p>
+          <p className="font-raleway font-semibold text-xs tracking-widest mb-1"
+            style={{ color: 'rgba(255,251,213,0.55)' }}>◈ PENGUKURAN TUBUH</p>
+          <p className="font-raleway text-[10px] mb-3"
+            style={{ color: 'rgba(255,251,213,0.3)' }}>
+            Estimasi AI · Kamera depan · Tinggi input: {m.height}cm
+          </p>
 
-          <MeasureRow label="HEIGHT" value={m.height} unit="cm" delay={0.15} />
-          <MeasureRow label="CHEST / BUST" value={m.chest} unit="cm" delay={0.2} />
-          <MeasureRow label="WAIST" value={m.waist} unit="cm" delay={0.25} />
-          <MeasureRow label="HIPS" value={m.hips} unit="cm" delay={0.3} />
-          <MeasureRow label="SHOULDER WIDTH" value={m.shoulderWidth} unit="cm" delay={0.35} />
-          <MeasureRow label="INSEAM" value={m.inseam} unit="cm" delay={0.4} />
-          <MeasureRow label="TORSO LENGTH" value={m.torsoLength} unit="cm" delay={0.45} />
-          <MeasureRow label="ARM LENGTH" value={m.armLength} unit="cm" delay={0.5} />
+          <MeasureRow label="TINGGI" value={m.height} unit="cm" delay={0.15} />
+          <MeasureRow label="DADA / BUST" value={m.chest} unit="cm" delay={0.2} />
+          <MeasureRow label="PINGGANG" value={m.waist} unit="cm" delay={0.25} />
+          <MeasureRow label="PINGGUL" value={m.hips} unit="cm" delay={0.3} />
+          <MeasureRow label="LEBAR BAHU" value={m.shoulderWidth} unit="cm" delay={0.35} />
+          <MeasureRow label="PANJANG KAKI" value={m.inseam} unit="cm" delay={0.4} />
+          <MeasureRow label="PANJANG TORSO" value={m.torsoLength} unit="cm" delay={0.45} />
+          <MeasureRow label="PANJANG LENGAN" value={m.armLength} unit="cm" delay={0.5} />
         </motion.div>
 
         {/* Tops size panel */}
@@ -112,9 +122,10 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="holo-panel rounded-sm p-4"
-          style={{ borderColor: 'rgba(139,92,246,0.3)' }}
+          style={{ borderColor: 'rgba(212,180,131,0.25)' }}
         >
-          <p className="font-mono text-xs tracking-widest mb-3" style={{ color: '#a78bfa' }}>◈ TOPS / SHIRT SIZE</p>
+          <p className="font-raleway font-semibold text-xs tracking-widest mb-3"
+            style={{ color: 'rgba(212,180,131,0.8)' }}>◈ UKURAN ATASAN</p>
           <div className="flex justify-around">
             <SizeTag label="US" value={sizes.tops.us} />
             <SizeTag label="EU" value={sizes.tops.eu} />
@@ -129,9 +140,10 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
           className="holo-panel rounded-sm p-4"
-          style={{ borderColor: 'rgba(139,92,246,0.3)' }}
+          style={{ borderColor: 'rgba(212,180,131,0.25)' }}
         >
-          <p className="font-mono text-xs tracking-widest mb-3" style={{ color: '#a78bfa' }}>◈ BOTTOMS / PANTS SIZE</p>
+          <p className="font-raleway font-semibold text-xs tracking-widest mb-3"
+            style={{ color: 'rgba(212,180,131,0.8)' }}>◈ UKURAN BAWAHAN</p>
           <div className="flex justify-around mb-3">
             <SizeTag label="US WAIST" value={sizes.bottoms.us} />
             <SizeTag label="EU" value={sizes.bottoms.eu + 'cm'} />
@@ -139,9 +151,10 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
           </div>
           <div className="flex justify-center">
             <div className="flex flex-col items-center">
-              <span className="font-mono text-[10px] text-sky-600 tracking-wider">JEANS SIZE</span>
-              <div className="mt-1 px-5 py-1.5 rounded-sm font-orbitron font-bold text-base"
-                style={{ border: '1px solid rgba(6,214,245,0.4)', color: '#67e8f9', background: 'rgba(6,214,245,0.06)' }}>
+              <span className="font-raleway font-medium text-[10px] tracking-wider"
+                style={{ color: 'rgba(255,251,213,0.4)' }}>UKURAN JEANS</span>
+              <div className="mt-1 px-5 py-1.5 rounded-sm font-raleway font-black text-base"
+                style={{ border: '1px solid rgba(255,251,213,0.3)', color: '#FFFBD5', background: 'rgba(255,251,213,0.06)' }}>
                 {sizes.jeans}
               </div>
             </div>
@@ -154,10 +167,11 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
           className="rounded-sm px-3 py-2"
-          style={{ border: '1px solid rgba(245,166,35,0.2)', background: 'rgba(245,166,35,0.04)' }}
+          style={{ border: '1px solid rgba(212,180,131,0.2)', background: 'rgba(212,180,131,0.04)' }}
         >
-          <p className="font-mono text-[10px] leading-relaxed" style={{ color: 'rgba(245,166,35,0.7)' }}>
-            ⚠ Measurements are AI estimates from a 2D camera. Actual sizes may vary ±5–10%. Try garments before purchase.
+          <p className="font-raleway text-[10px] leading-relaxed"
+            style={{ color: 'rgba(212,180,131,0.7)' }}>
+            ⚠ Ukuran merupakan estimasi AI dari kamera 2D. Ukuran aktual mungkin berbeda ±5–10%. Coba pakaian sebelum membeli.
           </p>
         </motion.div>
 
@@ -170,15 +184,15 @@ export default function ResultsScreen({ measurements: m, setup, onRescan, onHome
         >
           <button
             onClick={onHome}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-sm btn-cyber font-orbitron text-xs tracking-wider cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-sm btn-cyber font-raleway font-bold text-xs tracking-wider cursor-pointer"
           >
             <Home size={14} /> HOME
           </button>
           <button
             onClick={onRescan}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-sm btn-cyber-solid font-orbitron text-xs tracking-wider cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-sm btn-cyber-solid font-raleway font-black text-xs tracking-wider cursor-pointer"
           >
-            <RefreshCw size={14} /> RESCAN
+            <RefreshCw size={14} /> SCAN ULANG
           </button>
         </motion.div>
       </div>
