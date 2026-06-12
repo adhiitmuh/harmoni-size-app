@@ -271,7 +271,7 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
             ctx.shadowBlur = 0;
           });
 
-          const m = calculateMeasurements(kpsCalc, setup.heightCm);
+          const m = calculateMeasurements(kpsCalc, setup.heightCm, setup.gender);
           if (m) {
             if (frameCount.current % 6 === 0) setLiveMeasurements(m);
 

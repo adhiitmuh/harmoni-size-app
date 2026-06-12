@@ -21,9 +21,30 @@ const KP = {
   LEFT_ANKLE: 15, RIGHT_ANKLE: 16,
 };
 
+// Anthropometric ratios derived from ANSUR II & SizeUSA survey data.
+// shoulder_breadth / chest_circ, hip_breadth / waist_circ, hip_breadth / hip_circ
+const RATIOS = {
+  male: {
+    chestFromShoulder: 0.400,  // biacromial ~40cm / chest ~100cm
+    waistFromHip:      0.378,  // bitrochanteric ~33cm / waist ~87cm
+    hipsFromHip:       0.338,  // bitrochanteric ~33cm / hip ~98cm
+  },
+  female: {
+    chestFromShoulder: 0.383,  // biacromial ~36cm / bust ~94cm
+    waistFromHip:      0.462,  // bitrochanteric ~36cm / waist ~78cm
+    hipsFromHip:       0.350,  // bitrochanteric ~36cm / hip ~103cm
+  },
+  unisex: {
+    chestFromShoulder: 0.392,
+    waistFromHip:      0.420,
+    hipsFromHip:       0.344,
+  },
+};
+
 export const calculateMeasurements = (
   keypoints: Keypoint[],
-  userHeightCm: number
+  userHeightCm: number,
+  gender: 'male' | 'female' | 'unisex' = 'unisex'
 ): BodyMeasurements | null => {
   const MIN_SCORE = 0.25;
   const kp = (idx: number) => keypoints[idx];
@@ -73,28 +94,25 @@ export const calculateMeasurements = (
     : hipWidthPx * 2.2;
   const inseam = inseamPx * scale;
 
-  // Arm length: shoulder to wrist
-  let armLength = shoulderWidth * 1.6; // fallback estimate
+  // Arm length: shoulder to wrist via elbow
+  let armLength = shoulderWidth * 1.6;
   if (valid(KP.LEFT_SHOULDER) && valid(KP.LEFT_ELBOW) && valid(KP.LEFT_WRIST)) {
     armLength = (dist(leftShoulder, kp(KP.LEFT_ELBOW)) + dist(kp(KP.LEFT_ELBOW), kp(KP.LEFT_WRIST))) * scale;
   } else if (valid(KP.RIGHT_SHOULDER) && valid(KP.RIGHT_ELBOW) && valid(KP.RIGHT_WRIST)) {
     armLength = (dist(rightShoulder, kp(KP.RIGHT_ELBOW)) + dist(kp(KP.RIGHT_ELBOW), kp(KP.RIGHT_WRIST))) * scale;
   }
 
-  // Circumference estimates using anthropometric ratios
-  // Chest: shoulder width (projection) ≈ 55% of actual chest circumference
-  const chest = shoulderWidth / 0.55;
-  // Waist: narrower than hips; hip-joint width ≈ 35% of waist circumference
-  const waist = hipWidth / 0.35;
-  // Hips: hip-joint width ≈ 37% of hip circumference
-  const hips = hipWidth / 0.37;
+  const r = RATIOS[gender];
+  const chest = Math.round(shoulderWidth / r.chestFromShoulder);
+  const waist = Math.round(hipWidth / r.waistFromHip);
+  const hips  = Math.round(hipWidth / r.hipsFromHip);
 
   return {
     height: userHeightCm,
     shoulderWidth: Math.round(shoulderWidth),
-    chest: Math.round(chest),
-    waist: Math.round(waist),
-    hips: Math.round(hips),
+    chest,
+    waist,
+    hips,
     inseam: Math.round(inseam),
     torsoLength: Math.round(torsoLength),
     armLength: Math.round(armLength),
