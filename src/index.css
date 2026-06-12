@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cyber-bg: #030712;
+  --cyber-panel: #0a1628;
+  --cyber-cyan: #06d6f5;
+  --cyber-purple: #8b5cf6;
+  --cyber-green: #10f5a0;
+  --cyber-red: #f54b4b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cyber-bg);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #e0f2fe;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grid background */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(6, 214, 245, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 214, 245, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 12s linear infinite;
+}
+
+/* Glow utilities */
+.glow-cyan {
+  box-shadow: 0 0 10px rgba(6, 214, 245, 0.5), 0 0 30px rgba(6, 214, 245, 0.2);
+}
+.glow-purple {
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.2);
+}
+.glow-green {
+  box-shadow: 0 0 10px rgba(16, 245, 160, 0.5), 0 0 30px rgba(16, 245, 160, 0.2);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(6, 214, 245, 0.8), 0 0 20px rgba(6, 214, 245, 0.4);
+}
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(16, 245, 160, 0.8), 0 0 20px rgba(16, 245, 160, 0.4);
+}
+
+/* Holographic panel */
+.holo-panel {
+  background: linear-gradient(135deg, rgba(10, 22, 40, 0.9), rgba(6, 214, 245, 0.03));
+  border: 1px solid rgba(6, 214, 245, 0.3);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(6, 214, 245, 0.04), transparent);
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Corner bracket decoration */
+.corner-bracket {
+  position: relative;
+}
+.corner-bracket::before,
+.corner-bracket::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+}
+.corner-bracket::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--cyber-cyan);
+  border-left: 2px solid var(--cyber-cyan);
+}
+.corner-bracket::after {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid var(--cyber-cyan);
+  border-right: 2px solid var(--cyber-cyan);
+}
+
+/* Scan line */
+.scan-line-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyber-cyan), var(--cyber-purple), var(--cyber-cyan), transparent);
+  box-shadow: 0 0 8px var(--cyber-cyan), 0 0 20px rgba(6, 214, 245, 0.4);
+  animation: scanLine 3s linear infinite;
+}
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(6, 214, 245, 0.08), transparent);
+}
+
+/* Neon button */
+.btn-cyber {
+  background: transparent;
+  border: 1px solid var(--cyber-cyan);
+  color: var(--cyber-cyan);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-cyber::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cyber-cyan);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.btn-cyber:hover::before { opacity: 0.1; }
+.btn-cyber:hover {
+  box-shadow: 0 0 20px rgba(6, 214, 245, 0.4), inset 0 0 20px rgba(6, 214, 245, 0.05);
+  color: #fff;
+}
+.btn-cyber:active { transform: scale(0.98); }
+
+.btn-cyber-solid {
+  background: linear-gradient(135deg, rgba(6, 214, 245, 0.2), rgba(139, 92, 246, 0.2));
+  border: 1px solid var(--cyber-cyan);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+.btn-cyber-solid:hover {
+  background: linear-gradient(135deg, rgba(6, 214, 245, 0.35), rgba(139, 92, 246, 0.35));
+  box-shadow: 0 0 30px rgba(6, 214, 245, 0.4);
+}
+
+/* Data readout blinking cursor */
+.cursor-blink::after {
+  content: '_';
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Particle canvas */
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Number counter animation */
+.counter-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--cyber-bg); }
+::-webkit-scrollbar-thumb { background: rgba(6, 214, 245, 0.4); border-radius: 2px; }
+
+/* Input cyber style */
+.input-cyber {
+  background: rgba(6, 214, 245, 0.05);
+  border: 1px solid rgba(6, 214, 245, 0.3);
+  color: var(--cyber-cyan);
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.input-cyber:focus {
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 15px rgba(6, 214, 245, 0.2);
+  background: rgba(6, 214, 245, 0.08);
+}
+.input-cyber::placeholder {
+  color: rgba(6, 214, 245, 0.35);
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+@keyframes scanLine {
+  0% { top: 0; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes dataIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Loading bar */
+.loading-bar {
+  background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple), var(--cyber-cyan));
+  background-size: 200% 100%;
+  animation: loadingBar 1.5s ease-in-out infinite;
+}
+@keyframes loadingBar {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Measurement line animation */
+@keyframes measureReveal {
+  from { width: 0; opacity: 0; }
+  to { width: 100%; opacity: 1; }
+}
+.measure-reveal {
+  animation: measureReveal 0.6s ease-out forwards;
+}

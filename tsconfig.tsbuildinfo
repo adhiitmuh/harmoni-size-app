@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/components/ResultsScreen.tsx","./src/components/ScanScreen.tsx","./src/components/SetupScreen.tsx","./src/components/WelcomeScreen.tsx","./src/hooks/usePoseDetector.ts","./src/types/index.ts","./src/utils/measurements.ts","./src/utils/sizeChart.ts"],"version":"5.9.3"}
