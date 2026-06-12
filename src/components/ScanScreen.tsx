@@ -275,6 +275,88 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
           if (m) {
             if (frameCount.current % 6 === 0) setLiveMeasurements(m);
 
+            // Animated measurement threads
+            const threadProgress = isWalkby
+              ? 1
+              : Math.min(measureBuffer.current.length / STATIC_BUFFER, 1);
+            const tOffset = (frameCount.current * 1.5) % 18;
+            const isStableNow = scanState === 'stable';
+
+            const ls = kpsDisplay[5], rs = kpsDisplay[6];
+            const lh = kpsDisplay[11], rh = kpsDisplay[12];
+            const hasShoulders = (ls?.score ?? 0) >= 0.25 && (rs?.score ?? 0) >= 0.25;
+            const hasHips = (lh?.score ?? 0) >= 0.25 && (rh?.score ?? 0) >= 0.25;
+
+            if (hasShoulders && threadProgress > 0.05) {
+              const rgbThread = isStableNow ? '136,201,139' : '255,251,213';
+
+              const drawMeasureThread = (
+                x1: number, y1: number, x2: number, y2: number,
+                label: string, value: string, baseAlpha: number
+              ) => {
+                const extend = 26;
+                const dx = x2 - x1, dy = y2 - y1;
+                const len = Math.sqrt(dx*dx + dy*dy) || 1;
+                const ux = dx/len, uy = dy/len;
+                const sx = x1 - ux*extend, sy = y1 - uy*extend;
+                const ex = x2 + ux*extend, ey = y2 + uy*extend;
+                const totalLen = len + extend*2;
+                const drawLen = totalLen * threadProgress;
+
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.lineDashOffset = -tOffset;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(sx + ux * drawLen, sy + uy * drawLen);
+                ctx.strokeStyle = `rgba(${rgbThread},${baseAlpha * 0.6})`;
+                ctx.lineWidth = 1.2;
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+
+                // Left dot
+                ctx.beginPath();
+                ctx.arc(sx, sy, 2.5, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(${rgbThread},${baseAlpha * 0.75})`;
+                ctx.fill();
+
+                // Right dot + label (fades in as thread completes)
+                if (threadProgress >= 0.8) {
+                  const fadeIn = Math.min((threadProgress - 0.8) / 0.2, 1);
+                  ctx.beginPath();
+                  ctx.arc(ex, ey, 2.5, 0, Math.PI*2);
+                  ctx.fillStyle = `rgba(${rgbThread},${baseAlpha * fadeIn * 0.8})`;
+                  ctx.fill();
+                  ctx.font = '500 9px sans-serif';
+                  ctx.fillStyle = `rgba(${rgbThread},${baseAlpha * fadeIn * 0.5})`;
+                  ctx.fillText(label, ex + 7, ey);
+                  ctx.font = 'bold 11px sans-serif';
+                  ctx.fillStyle = `rgba(${rgbThread},${baseAlpha * fadeIn})`;
+                  ctx.fillText(value, ex + 7, ey + 11);
+                }
+              };
+
+              // Shoulder
+              drawMeasureThread(ls.x, ls.y, rs.x, rs.y, 'BAHU', `${m.shoulderWidth}cm`, 0.9);
+
+              if (hasHips) {
+                const t1 = 0.28;
+                drawMeasureThread(
+                  ls.x + (lh.x - ls.x)*t1, ls.y + (lh.y - ls.y)*t1,
+                  rs.x + (rh.x - rs.x)*t1, rs.y + (rh.y - rs.y)*t1,
+                  'DADA', `${m.chest}cm`, 0.85
+                );
+                const t2 = 0.62;
+                drawMeasureThread(
+                  ls.x + (lh.x - ls.x)*t2, ls.y + (lh.y - ls.y)*t2,
+                  rs.x + (rh.x - rs.x)*t2, rs.y + (rh.y - rs.y)*t2,
+                  'PINGGANG', `${m.waist}cm`, 0.85
+                );
+                drawMeasureThread(lh.x, lh.y, rh.x, rh.y, 'PINGGUL', `${m.hips}cm`, 0.9);
+              }
+            }
+
             if (isWalkby) {
               const quality = calcPoseQualityScore(kpsDisplay, canvas);
               if (frameCount.current % 4 === 0) setPoseQuality(quality);
@@ -305,15 +387,15 @@ export default function ScanScreen({ setup, onComplete, onBack }: Props) {
               measureBuffer.current = [...measureBuffer.current.slice(-(STATIC_BUFFER - 1)), m];
               if (isStable(measureBuffer.current)) {
                 setScanState('stable');
-                setStatusMsg('MEASUREMENTS STABLE — CAPTURE READY');
+                setStatusMsg('UKURAN STABIL — SIAP DIAMBIL');
               } else if (scanState === 'scanning') {
                 const pct = Math.round((measureBuffer.current.length / STATIC_BUFFER) * 100);
-                setStatusMsg(`CALIBRATING... ${pct}%`);
+                setStatusMsg(`MENGUKUR... ${pct}%`);
               }
             }
           } else {
             measureBuffer.current = [];
-            if (!isWalkby && scanState === 'scanning') setStatusMsg('ALIGN FULL BODY IN FRAME');
+            if (!isWalkby && scanState === 'scanning') setStatusMsg('POSISIKAN SELURUH TUBUH DI FRAME');
           }
         } else {
           if (frameCount.current % 5 === 0) setDetectedKps(0);
