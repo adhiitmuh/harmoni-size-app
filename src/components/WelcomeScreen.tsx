@@ -127,7 +127,7 @@ export default function WelcomeScreen({ onStart }: Props) {
           <div className="h-px w-10" style={{ background: 'rgba(255,251,213,0.3)' }} />
           <p className="font-raleway font-medium text-xs tracking-[0.25em] uppercase"
             style={{ color: 'rgba(255,251,213,0.55)' }}>
-            AI Body Size Scanner
+            body size scanner
           </p>
           <div className="h-px w-10" style={{ background: 'rgba(255,251,213,0.3)' }} />
         </div>
@@ -141,7 +141,7 @@ export default function WelcomeScreen({ onStart }: Props) {
         className="font-raleway font-light text-sm md:text-base mb-10 text-center max-w-xs"
         style={{ color: 'rgba(255,251,213,0.5)' }}
       >
-        Ukur tubuhmu dengan presisi menggunakan AI pose detection
+        ukur tubuhmu hanya dengan scan presisi
       </motion.p>
 
       {/* CTA Button */}
